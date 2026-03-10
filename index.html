@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>Business Experiment Dojo</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
-<link href="https://fonts.googleapis.com/css2?family=Raleway:wght@300;400;600;700;800;900&family=Oxygen:wght@300;400;700&family=Google+Sans:wght@400;700&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Raleway:wght@300;400;600;700;800;900&family=Oxygen:wght@300;400;700&family=Lato:wght@300;400;700;900&display=swap" rel="stylesheet"/>
 <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
 <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
 <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
@@ -25,7 +25,7 @@ input:focus,textarea:focus{outline:none}
 const { useState } = React;
 
 
-const FONTS = "https://fonts.googleapis.com/css2?family=Raleway:wght@300;400;600;700;800;900&family=Oxygen:wght@300;400;700&family=Google+Sans:wght@400;700&display=swap";
+const FONTS = "https://fonts.googleapis.com/css2?family=Raleway:wght@300;400;600;700;800;900&family=Oxygen:wght@300;400;700&family=Lato:wght@300;400;700;900&display=swap";
 
 const J = {
   emerald:  "#00C48C",
@@ -183,7 +183,7 @@ function Ring({p=0,size=100,stroke=7,color=J.emerald,label}) {
           <span style={{fontSize:size*.19,fontWeight:700,fontFamily:"'Raleway',sans-serif",color:J.text}}>{Math.round(p)}%</span>
         </div>
       </div>
-      {label&&<span style={{fontSize:10,fontFamily:"'Google Sans',monospace",color:J.muted,letterSpacing:"0.14em",textTransform:"uppercase",textAlign:"center"}}>{label}</span>}
+      {label&&<span style={{fontSize:10,fontFamily:"'Lato',sans-serif",color:J.muted,letterSpacing:"0.14em",textTransform:"uppercase",textAlign:"center"}}>{label}</span>}
     </div>
   );
 }
@@ -191,7 +191,7 @@ function Ring({p=0,size=100,stroke=7,color=J.emerald,label}) {
 function InlineField({label,value,onChange,multi,placeholder,accent=J.emerald}) {
   return (
     <div style={{marginBottom:22}}>
-      <div style={{fontSize:9,fontFamily:"'Google Sans',monospace",color:accent,letterSpacing:"0.18em",textTransform:"uppercase",marginBottom:7}}>{label}</div>
+      <div style={{fontSize:9,fontFamily:"'Lato',sans-serif",color:accent,letterSpacing:"0.18em",textTransform:"uppercase",marginBottom:7}}>{label}</div>
       {multi
         ? <textarea value={value} onChange={e=>onChange(e.target.value)} placeholder={placeholder||""} rows={3}
             style={{background:"transparent",border:"none",borderLeft:`2px solid ${J.dim}`,color:J.text,fontFamily:"'Oxygen',sans-serif",fontSize:13,padding:"4px 0 4px 12px",outline:"none",resize:"vertical",width:"100%",lineHeight:1.7,boxSizing:"border-box"}}/>
@@ -208,8 +208,8 @@ function Section({label,children,accent=J.emerald,defaultOpen=false}) {
     <div style={{marginBottom:0}}>
       <button onClick={()=>setOpen(o=>!o)} style={{width:"100%",background:"none",border:"none",cursor:"pointer",display:"flex",alignItems:"center",gap:14,padding:"22px 0",borderBottom:`1px solid ${J.line}`}}>
         <span style={{width:3,height:20,background:open?accent:J.dim,borderRadius:2,transition:"background .2s",flexShrink:0}}/>
-        <span style={{fontSize:10,fontFamily:"'Google Sans',monospace",color:open?accent:J.muted,letterSpacing:"0.16em",textTransform:"uppercase",flex:1,textAlign:"left"}}>{label}</span>
-        <span style={{color:J.dim,fontSize:10,fontFamily:"'Google Sans',monospace",transform:open?"rotate(180deg)":"",transition:"transform .2s"}}>▾</span>
+        <span style={{fontSize:10,fontFamily:"'Lato',sans-serif",color:open?accent:J.muted,letterSpacing:"0.16em",textTransform:"uppercase",flex:1,textAlign:"left"}}>{label}</span>
+        <span style={{color:J.dim,fontSize:10,fontFamily:"'Lato',sans-serif",transform:open?"rotate(180deg)":"",transition:"transform .2s"}}>▾</span>
       </button>
       {open&&<div style={{paddingTop:28,paddingBottom:12}}>{children}</div>}
     </div>
@@ -233,9 +233,9 @@ function HomeTab({businesses}) {
   return (
     <div>
       <div style={{textAlign:"center",padding:"52px 0 60px"}}>
-        <div style={{fontSize:9,fontFamily:"'Google Sans',monospace",color:J.muted,letterSpacing:"0.28em",textTransform:"uppercase",marginBottom:36}}>Business Experiment Dojo</div>
+        <div style={{fontSize:9,fontFamily:"'Lato',sans-serif",color:J.muted,letterSpacing:"0.28em",textTransform:"uppercase",marginBottom:36}}>Business Experiment Dojo</div>
         <Ring p={overall} size={190} stroke={11} color={J.emerald} label="Overall Progress"/>
-        <div style={{marginTop:28,fontSize:11,fontFamily:"'Google Sans',monospace",color:J.muted,letterSpacing:"0.12em"}}>
+        <div style={{marginTop:28,fontSize:11,fontFamily:"'Lato',sans-serif",color:J.muted,letterSpacing:"0.12em"}}>
           {done} / {all.length} tasks complete &nbsp;·&nbsp; {businesses.length} active experiments
         </div>
       </div>
@@ -248,7 +248,7 @@ function HomeTab({businesses}) {
               <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",marginBottom:30}}>
                 <div>
                   <div style={{fontSize:26,fontFamily:"'Raleway',sans-serif",fontWeight:800,color:J.text,letterSpacing:"0.04em",marginBottom:8}}>{biz.name}</div>
-                  <div style={{fontSize:10,fontFamily:"'Google Sans',monospace",color:biz.color,letterSpacing:"0.12em"}}>{biz.status} &nbsp;·&nbsp; {d}/{biz.tasks.length} tasks</div>
+                  <div style={{fontSize:10,fontFamily:"'Lato',sans-serif",color:biz.color,letterSpacing:"0.12em"}}>{biz.status} &nbsp;·&nbsp; {d}/{biz.tasks.length} tasks</div>
                 </div>
                 <Ring p={p} size={74} stroke={5} color={biz.color}/>
               </div>
@@ -260,11 +260,11 @@ function HomeTab({businesses}) {
                   const short=ph.split("·")[1]?.trim()||ph;
                   return (
                     <div key={ph} style={{display:"flex",alignItems:"center",gap:16}}>
-                      <div style={{fontSize:10,fontFamily:"'Google Sans',monospace",color:J.muted,width:92,flexShrink:0,letterSpacing:"0.07em"}}>{short}</div>
+                      <div style={{fontSize:10,fontFamily:"'Lato',sans-serif",color:J.muted,width:92,flexShrink:0,letterSpacing:"0.07em"}}>{short}</div>
                       <div style={{flex:1,height:4,background:J.dim,borderRadius:2,overflow:"hidden"}}>
                         <div style={{height:"100%",width:`${pp}%`,background:color,borderRadius:2,transition:"width .6s ease"}}/>
                       </div>
-                      <div style={{fontSize:10,fontFamily:"'Google Sans',monospace",color:J.muted,width:36,textAlign:"right"}}>{pts.filter(t=>t.done).length}/{pts.length}</div>
+                      <div style={{fontSize:10,fontFamily:"'Lato',sans-serif",color:J.muted,width:36,textAlign:"right"}}>{pts.filter(t=>t.done).length}/{pts.length}</div>
                     </div>
                   );
                 })}
@@ -282,7 +282,7 @@ function DashboardTab({businesses}) {
   return (
     <div>
       <div style={{paddingBottom:36,borderBottom:`1px solid ${J.line}`,marginBottom:44}}>
-        <div style={{fontSize:9,fontFamily:"'Google Sans',monospace",color:J.muted,letterSpacing:"0.22em",textTransform:"uppercase",marginBottom:12}}>Progress Dashboard</div>
+        <div style={{fontSize:9,fontFamily:"'Lato',sans-serif",color:J.muted,letterSpacing:"0.22em",textTransform:"uppercase",marginBottom:12}}>Progress Dashboard</div>
         <div style={{fontSize:30,fontFamily:"'Raleway',sans-serif",fontWeight:800,color:J.text,letterSpacing:"0.03em"}}>Task Completion by Phase</div>
       </div>
       {businesses.map((biz,bi)=>(
@@ -290,7 +290,7 @@ function DashboardTab({businesses}) {
           <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:24}}>
             <div>
               <div style={{fontSize:18,fontFamily:"'Raleway',sans-serif",fontWeight:700,color:J.text,letterSpacing:"0.05em"}}>{biz.name}</div>
-              <div style={{fontSize:10,fontFamily:"'Google Sans',monospace",color:J.muted,marginTop:4,letterSpacing:"0.1em"}}>{biz.tasks.filter(t=>t.done).length} / {biz.tasks.length} total</div>
+              <div style={{fontSize:10,fontFamily:"'Lato',sans-serif",color:J.muted,marginTop:4,letterSpacing:"0.1em"}}>{biz.tasks.filter(t=>t.done).length} / {biz.tasks.length} total</div>
             </div>
             <Ring p={pct(biz.tasks)} size={56} stroke={4} color={biz.color}/>
           </div>
@@ -302,8 +302,8 @@ function DashboardTab({businesses}) {
               return (
                 <div key={ph}>
                   <div style={{display:"flex",justifyContent:"space-between",marginBottom:7}}>
-                    <span style={{fontSize:9,fontFamily:"'Google Sans',monospace",color,letterSpacing:"0.14em",textTransform:"uppercase"}}>{ph}</span>
-                    <span style={{fontSize:10,fontFamily:"'Google Sans',monospace",color:J.muted}}>{pts.filter(t=>t.done).length}/{pts.length} &nbsp; {pp}%</span>
+                    <span style={{fontSize:9,fontFamily:"'Lato',sans-serif",color,letterSpacing:"0.14em",textTransform:"uppercase"}}>{ph}</span>
+                    <span style={{fontSize:10,fontFamily:"'Lato',sans-serif",color:J.muted}}>{pts.filter(t=>t.done).length}/{pts.length} &nbsp; {pp}%</span>
                   </div>
                   <div style={{height:8,background:J.dim,borderRadius:4,overflow:"hidden"}}>
                     <div style={{height:"100%",width:`${pp}%`,background:color,borderRadius:4,transition:"width .6s ease"}}/>
@@ -362,7 +362,7 @@ Please be specific, honest, and base your answers on real comparable products wh
   return (
     <div>
       <div style={{paddingBottom:36,borderBottom:`1px solid ${J.line}`,marginBottom:44}}>
-        <div style={{fontSize:9,fontFamily:"'Google Sans',monospace",color:J.muted,letterSpacing:"0.22em",textTransform:"uppercase",marginBottom:12}}>Idea Lab</div>
+        <div style={{fontSize:9,fontFamily:"'Lato',sans-serif",color:J.muted,letterSpacing:"0.22em",textTransform:"uppercase",marginBottom:12}}>Idea Lab</div>
         <div style={{fontSize:30,fontFamily:"'Raleway',sans-serif",fontWeight:800,color:J.text,letterSpacing:"0.03em"}}>New Business Experiment</div>
         <div style={{fontSize:13,color:J.muted,fontFamily:"'Oxygen',sans-serif",marginTop:10,lineHeight:1.7}}>Fill the brief → generate a research prompt → paste Claude's answers → create your experiment tab.</div>
       </div>
@@ -372,7 +372,7 @@ Please be specific, honest, and base your answers on real comparable products wh
           <div key={i} style={{display:"flex",alignItems:"center",flex:1}}>
             <div onClick={()=>setStep(i+1)} style={{cursor:"pointer",display:"flex",alignItems:"center",gap:10}}>
               <div style={{width:28,height:28,borderRadius:"50%",display:"flex",alignItems:"center",justifyContent:"center",background:step===i+1?J.emerald:step>i+1?J.dim:"transparent",border:`1px solid ${step>=i+1?J.emerald:J.dim}`,color:step===i+1?"#05140E":step>i+1?J.emerald:J.muted,fontSize:11,fontWeight:700,fontFamily:"'Raleway',sans-serif",flexShrink:0,transition:"all .2s"}}>{i+1}</div>
-              <span style={{fontSize:9,fontFamily:"'Google Sans',monospace",color:step>=i+1?J.emerald:J.muted,letterSpacing:"0.1em",textTransform:"uppercase",whiteSpace:"nowrap"}}>{s}</span>
+              <span style={{fontSize:9,fontFamily:"'Lato',sans-serif",color:step>=i+1?J.emerald:J.muted,letterSpacing:"0.1em",textTransform:"uppercase",whiteSpace:"nowrap"}}>{s}</span>
             </div>
             {i<steps.length-1&&<div style={{flex:1,height:1,background:J.dim,margin:"0 14px"}}/>}
           </div>
@@ -400,7 +400,7 @@ Please be specific, honest, and base your answers on real comparable products wh
       {step===2&&(
         <div>
           <div style={{fontSize:12,color:J.muted,fontFamily:"'Oxygen',sans-serif",lineHeight:1.7,marginBottom:18}}>Copy this prompt, open a new Claude chat, and paste it. Come back with the answers for Step 3.</div>
-          <pre style={{background:J.surface,borderLeft:`3px solid ${J.emerald}`,padding:22,fontFamily:"'Google Sans',monospace",fontSize:11,color:J.text,whiteSpace:"pre-wrap",lineHeight:1.9,maxHeight:360,overflowY:"auto",margin:"0 0 22px",borderRadius:"0 4px 4px 0"}}>{prompt}</pre>
+          <pre style={{background:J.surface,borderLeft:`3px solid ${J.emerald}`,padding:22,fontFamily:"'Lato',sans-serif",fontSize:11,color:J.text,whiteSpace:"pre-wrap",lineHeight:1.9,maxHeight:360,overflowY:"auto",margin:"0 0 22px",borderRadius:"0 4px 4px 0"}}>{prompt}</pre>
           <div style={{display:"flex",gap:12,flexWrap:"wrap"}}>
             <Btn onClick={doCopy}>{copied?"✓ Copied!":"Copy Prompt"}</Btn>
             <Btn onClick={()=>setStep(1)} variant="ghost">← Edit Brief</Btn>
@@ -413,7 +413,7 @@ Please be specific, honest, and base your answers on real comparable products wh
         <div>
           <div style={{fontSize:12,color:J.muted,fontFamily:"'Oxygen',sans-serif",lineHeight:1.7,marginBottom:18}}>Paste Claude's full response here. It will be saved to your experiment's Research section.</div>
           <textarea value={answers} onChange={e=>setAnswers(e.target.value)} rows={14} placeholder="Paste Claude's complete response here…"
-            style={{width:"100%",background:J.surface,border:"none",borderLeft:`3px solid ${J.topaz}`,color:J.text,fontFamily:"'Google Sans',monospace",fontSize:12,padding:"18px",outline:"none",resize:"vertical",boxSizing:"border-box",lineHeight:1.9,borderRadius:"0 4px 4px 0"}}/>
+            style={{width:"100%",background:J.surface,border:"none",borderLeft:`3px solid ${J.topaz}`,color:J.text,fontFamily:"'Lato',sans-serif",fontSize:12,padding:"18px",outline:"none",resize:"vertical",boxSizing:"border-box",lineHeight:1.9,borderRadius:"0 4px 4px 0"}}/>
           <div style={{display:"flex",gap:12,marginTop:18,flexWrap:"wrap"}}>
             <Btn onClick={()=>setStep(2)} variant="ghost">← Back</Btn>
             <Btn onClick={()=>setStep(4)}>Preview & Create →</Btn>
@@ -427,12 +427,12 @@ Please be specific, honest, and base your answers on real comparable products wh
           <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:"0 48px",marginBottom:32}}>
             {[["Business Name",brief.name],["Target Audience",brief.targetAudience],["Value Proposition",brief.valueProp],["Product Type",brief.productType]].map(([k,v])=>(
               <div key={k} style={{marginBottom:20}}>
-                <div style={{fontSize:9,fontFamily:"'Google Sans',monospace",color:J.topaz,letterSpacing:"0.18em",textTransform:"uppercase",marginBottom:7}}>{k}</div>
+                <div style={{fontSize:9,fontFamily:"'Lato',sans-serif",color:J.topaz,letterSpacing:"0.18em",textTransform:"uppercase",marginBottom:7}}>{k}</div>
                 <div style={{fontSize:13,color:J.text,fontFamily:"'Oxygen',sans-serif",borderBottom:`1px solid ${J.line}`,paddingBottom:8}}>{v||"—"}</div>
               </div>
             ))}
           </div>
-          {!canCreate&&<div style={{fontSize:11,fontFamily:"'Google Sans',monospace",color:J.gold,marginBottom:16,letterSpacing:"0.08em"}}>⚠ Business name and Claude's answers are required.</div>}
+          {!canCreate&&<div style={{fontSize:11,fontFamily:"'Lato',sans-serif",color:J.gold,marginBottom:16,letterSpacing:"0.08em"}}>⚠ Business name and Claude's answers are required.</div>}
           <div style={{display:"flex",gap:12,flexWrap:"wrap"}}>
             <Btn onClick={handleCreate} style={canCreate?{}:{opacity:.3,pointerEvents:"none"}}>Create Experiment Tab →</Btn>
             <Btn onClick={()=>setStep(3)} variant="ghost">← Edit Answers</Btn>
@@ -457,7 +457,7 @@ function ContactsSection({contacts,onChange}) {
           <div style={{display:"grid",gridTemplateColumns:"1fr 1fr 1fr 1fr",gap:"0 28px",marginBottom:10}}>
             {[["Name","name"],["Role / Company","role"],["Email or URL","email"],["Notes","notes"]].map(([pl,k])=>(
               <div key={k}>
-                <div style={{fontSize:8,fontFamily:"'Google Sans',monospace",color:J.muted,letterSpacing:"0.14em",textTransform:"uppercase",marginBottom:4}}>{pl}</div>
+                <div style={{fontSize:8,fontFamily:"'Lato',sans-serif",color:J.muted,letterSpacing:"0.14em",textTransform:"uppercase",marginBottom:4}}>{pl}</div>
                 <input value={c[k]} onChange={e=>upd(c.id,k,e.target.value)} placeholder={pl} style={fi}/>
               </div>
             ))}
@@ -481,8 +481,8 @@ function LinksSection({links,onChange}) {
       {links.map(l=>(
         <div key={l.id} style={{display:"flex",alignItems:"center",gap:18,borderBottom:`1px solid ${J.line}`,paddingBottom:12,marginBottom:12}}>
           <input value={l.label} onChange={e=>upd(l.id,"label",e.target.value)} placeholder="Label" style={{flex:"0 0 160px",background:"transparent",border:"none",borderBottom:`1px solid ${J.dim}`,color:J.text,fontFamily:"'Oxygen',sans-serif",fontSize:12,padding:"4px 0",outline:"none"}}/>
-          <input value={l.url} onChange={e=>upd(l.id,"url",e.target.value)} placeholder="https://…" style={{flex:1,background:"transparent",border:"none",borderBottom:`1px solid ${J.dim}`,color:J.sapphire,fontFamily:"'Google Sans',monospace",fontSize:12,padding:"4px 0",outline:"none"}}/>
-          {l.url&&<a href={l.url} target="_blank" rel="noreferrer" style={{color:J.topaz,fontSize:11,fontFamily:"'Google Sans',monospace",textDecoration:"none",whiteSpace:"nowrap",flexShrink:0,letterSpacing:"0.06em"}}>↗ open</a>}
+          <input value={l.url} onChange={e=>upd(l.id,"url",e.target.value)} placeholder="https://…" style={{flex:1,background:"transparent",border:"none",borderBottom:`1px solid ${J.dim}`,color:J.sapphire,fontFamily:"'Lato',sans-serif",fontSize:12,padding:"4px 0",outline:"none"}}/>
+          {l.url&&<a href={l.url} target="_blank" rel="noreferrer" style={{color:J.topaz,fontSize:11,fontFamily:"'Lato',sans-serif",textDecoration:"none",whiteSpace:"nowrap",flexShrink:0,letterSpacing:"0.06em"}}>↗ open</a>}
           <button onClick={()=>rm(l.id)} style={{background:"none",border:"none",color:J.muted,cursor:"pointer",fontSize:18,padding:"0 4px",flexShrink:0,lineHeight:1}}>&times;</button>
         </div>
       ))}
@@ -503,7 +503,7 @@ function BmcSection({bmc,onChange}) {
           const color=BMC_COLORS[cell.key];
           return (
             <div key={cell.key} style={{gridColumn:cell.col,gridRow:cell.row,background:J.surface,padding:"14px 16px",display:"flex",flexDirection:"column"}}>
-              <div style={{fontSize:8,fontFamily:"'Google Sans',monospace",color,letterSpacing:"0.16em",textTransform:"uppercase",marginBottom:10,paddingBottom:7,borderBottom:`2px solid ${color}33`}}>{cell.label}</div>
+              <div style={{fontSize:8,fontFamily:"'Lato',sans-serif",color,letterSpacing:"0.16em",textTransform:"uppercase",marginBottom:10,paddingBottom:7,borderBottom:`2px solid ${color}33`}}>{cell.label}</div>
               <textarea
                 value={bmc[cell.key]}
                 onChange={e=>onChange({...bmc,[cell.key]:e.target.value})}
@@ -528,11 +528,11 @@ function ResearchSection({research,onChange}) {
         <Btn onClick={()=>setEdit(!edit)} variant="ghost" style={{fontSize:10,padding:"5px 12px"}}>{edit?"Done":"Edit"}</Btn>
       </div>
       {edit
-        ? <textarea value={research} onChange={e=>onChange(e.target.value)} rows={14} style={{width:"100%",background:J.surface,border:"none",borderLeft:`3px solid ${J.topaz}`,color:J.text,fontFamily:"'Google Sans',monospace",fontSize:12,padding:"18px",outline:"none",resize:"vertical",boxSizing:"border-box",lineHeight:1.9,borderRadius:"0 4px 4px 0"}}/>
+        ? <textarea value={research} onChange={e=>onChange(e.target.value)} rows={14} style={{width:"100%",background:J.surface,border:"none",borderLeft:`3px solid ${J.topaz}`,color:J.text,fontFamily:"'Lato',sans-serif",fontSize:12,padding:"18px",outline:"none",resize:"vertical",boxSizing:"border-box",lineHeight:1.9,borderRadius:"0 4px 4px 0"}}/>
         : <div>
             {research.split("\n").map((line,i)=>{
               const cap=line.match(/^[A-Z][A-Z\s\-\/]{3,}$/);
-              if(cap) return <div key={i} style={{fontSize:9,fontFamily:"'Google Sans',monospace",color:J.topaz,letterSpacing:"0.2em",textTransform:"uppercase",marginTop:28,marginBottom:8}}>{line}</div>;
+              if(cap) return <div key={i} style={{fontSize:9,fontFamily:"'Lato',sans-serif",color:J.topaz,letterSpacing:"0.2em",textTransform:"uppercase",marginTop:28,marginBottom:8}}>{line}</div>;
               if(!line.trim()) return <div key={i} style={{height:2}}/>;
               return <div key={i} style={{fontSize:13,color:J.text,lineHeight:1.85,marginBottom:2,fontFamily:"'Oxygen',sans-serif"}}>{line}</div>;
             })}
@@ -559,12 +559,12 @@ function ChecklistSection({tasks,onChange}) {
         return (
           <div key={ph} style={{marginBottom:36}}>
             <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:16}}>
-              <div style={{fontSize:9,fontFamily:"'Google Sans',monospace",color,letterSpacing:"0.2em",textTransform:"uppercase"}}>{ph}</div>
+              <div style={{fontSize:9,fontFamily:"'Lato',sans-serif",color,letterSpacing:"0.2em",textTransform:"uppercase"}}>{ph}</div>
               <div style={{display:"flex",alignItems:"center",gap:14}}>
                 <div style={{width:88,height:3,background:J.dim,borderRadius:2,overflow:"hidden"}}>
                   <div style={{height:"100%",width:`${pp}%`,background:color,borderRadius:2,transition:"width .4s"}}/>
                 </div>
-                <span style={{fontSize:10,fontFamily:"'Google Sans',monospace",color:J.muted}}>{pts.filter(t=>t.done).length}/{pts.length}</span>
+                <span style={{fontSize:10,fontFamily:"'Lato',sans-serif",color:J.muted}}>{pts.filter(t=>t.done).length}/{pts.length}</span>
               </div>
             </div>
             {pts.map(t=>(
@@ -577,7 +577,7 @@ function ChecklistSection({tasks,onChange}) {
                 <button onClick={()=>remove(t.id)} style={{background:"none",border:"none",color:J.dim,cursor:"pointer",fontSize:18,padding:"0 4px",flexShrink:0,lineHeight:1}}>&times;</button>
               </div>
             ))}
-            <button onClick={()=>addTask(ph)} style={{background:"none",border:"none",color:J.dim,cursor:"pointer",fontSize:11,fontFamily:"'Google Sans',monospace",padding:"10px 0 0 32px",letterSpacing:"0.1em"}}>+ add task</button>
+            <button onClick={()=>addTask(ph)} style={{background:"none",border:"none",color:J.dim,cursor:"pointer",fontSize:11,fontFamily:"'Lato',sans-serif",padding:"10px 0 0 32px",letterSpacing:"0.1em"}}>+ add task</button>
           </div>
         );
       })}
@@ -594,11 +594,11 @@ function BusinessTab({biz,onChange}) {
     <div>
       <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",paddingBottom:36,borderBottom:`1px solid ${J.line}`,marginBottom:4}}>
         <div style={{flex:1}}>
-          <div style={{fontSize:9,fontFamily:"'Google Sans',monospace",color:J.muted,letterSpacing:"0.22em",textTransform:"uppercase",marginBottom:12}}>Business Experiment</div>
+          <div style={{fontSize:9,fontFamily:"'Lato',sans-serif",color:J.muted,letterSpacing:"0.22em",textTransform:"uppercase",marginBottom:12}}>Business Experiment</div>
           <div style={{fontSize:36,fontFamily:"'Raleway',sans-serif",fontWeight:800,color:J.text,letterSpacing:"0.04em",lineHeight:1.05,marginBottom:14}}>{biz.name}</div>
           <div style={{display:"flex",alignItems:"center",gap:24}}>
-            <span style={{fontSize:10,fontFamily:"'Google Sans',monospace",color:biz.color,letterSpacing:"0.12em"}}>{biz.status}</span>
-            <span style={{fontSize:10,fontFamily:"'Google Sans',monospace",color:J.muted,letterSpacing:"0.1em"}}>{done}/{biz.tasks.length} tasks</span>
+            <span style={{fontSize:10,fontFamily:"'Lato',sans-serif",color:biz.color,letterSpacing:"0.12em"}}>{biz.status}</span>
+            <span style={{fontSize:10,fontFamily:"'Lato',sans-serif",color:J.muted,letterSpacing:"0.1em"}}>{done}/{biz.tasks.length} tasks</span>
             <div style={{width:140,height:3,background:J.dim,borderRadius:2,overflow:"hidden"}}>
               <div style={{height:"100%",width:`${p}%`,background:biz.color,borderRadius:2,transition:"width .6s"}}/>
             </div>
@@ -667,14 +667,14 @@ function App() {
       `}</style>
 
       <nav style={{background:J.surface,borderBottom:`1px solid ${J.line}`,display:"flex",alignItems:"center",padding:"0 40px",overflowX:"auto",position:"sticky",top:0,zIndex:100}}>
-        <div style={{fontSize:9,fontFamily:"'Google Sans',monospace",color:J.emerald,letterSpacing:"0.24em",padding:"20px 28px 20px 0",borderRight:`1px solid ${J.line}`,marginRight:4,whiteSpace:"nowrap",flexShrink:0}}>
+        <div style={{fontSize:9,fontFamily:"'Lato',sans-serif",color:J.emerald,letterSpacing:"0.24em",padding:"20px 28px 20px 0",borderRight:`1px solid ${J.line}`,marginRight:4,whiteSpace:"nowrap",flexShrink:0}}>
           BIZ DOJO &nbsp; {overall}%
         </div>
         {TABS.map(tab=>{
           const act=active===tab.id;
           const col=tab.color||J.emerald;
           return (
-            <button key={tab.id} onClick={()=>setActive(tab.id)} style={{background:"none",border:"none",cursor:"pointer",padding:"20px 22px",fontSize:10,fontFamily:"'Google Sans',monospace",color:act?col:J.muted,borderBottom:`2px solid ${act?col:"transparent"}`,letterSpacing:"0.12em",textTransform:"uppercase",whiteSpace:"nowrap",transition:"all .15s"}}>
+            <button key={tab.id} onClick={()=>setActive(tab.id)} style={{background:"none",border:"none",cursor:"pointer",padding:"20px 22px",fontSize:10,fontFamily:"'Lato',sans-serif",color:act?col:J.muted,borderBottom:`2px solid ${act?col:"transparent"}`,letterSpacing:"0.12em",textTransform:"uppercase",whiteSpace:"nowrap",transition:"all .15s"}}>
               {tab.label}
             </button>
           );
