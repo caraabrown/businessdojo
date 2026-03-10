@@ -1,0 +1,667 @@
+import { useState } from "react";
+
+const FONTS = "https://fonts.googleapis.com/css2?family=Raleway:wght@300;400;600;700;800;900&family=Oxygen:wght@300;400;700&family=GoogleSans+Prime:wght@400;700&display=swap";
+
+const J = {
+  emerald:  "#00C48C",
+  sapphire: "#3B82F6",
+  amethyst: "#A855F7",
+  ruby:     "#F43F5E",
+  topaz:    "#06B6D4",
+  gold:     "#F59E0B",
+  bg:       "#090B14",
+  surface:  "#0E1120",
+  line:     "#1B1F35",
+  text:     "#EEE9FF",
+  muted:    "#6B6E8A",
+  dim:      "#2A2D45",
+};
+
+const JOB_TASKS = [
+  {id:"j1",phase:"Phase 1 · Foundation",text:"Define your specific target user in one sentence — e.g. 'Mid-to-senior level professionals in design, strategy, or operations who have been applying 4+ weeks and keep getting ghosted'",done:false},
+  {id:"j2",phase:"Phase 1 · Foundation",text:"Set up a simple landing page with email capture and 'Join the waitlist' CTA using Carrd or Framer (free, takes ~2 hours)",done:false},
+  {id:"j3",phase:"Phase 1 · Foundation",text:"Create a LinkedIn content account dedicated to job search strategy. Post 3x/week: ATS tips, recruiter vetting, salary negotiation, LinkedIn outreach scripts",done:false},
+  {id:"j4",phase:"Phase 1 · Foundation",text:"Join and become active in 5 communities: r/jobs, r/careerguidance, r/recruitinghell, LinkedIn job seeker groups, design/ops Slacks. Help only — do not pitch yet.",done:false},
+  {id:"j5",phase:"Phase 1 · Foundation",text:"Identify 20–30 actively job-hunting, frustrated people in those communities. DM them offering a 20-min feedback session in exchange for free lifetime access",done:false},
+  {id:"j6",phase:"Phase 2 · Pre-Sell",text:"Offer 25 'Founding Member' spots at $49 one-time (vs. planned $25/mo). Frame as: locked-in lifetime access + help shape product + first access at launch",done:false},
+  {id:"j7",phase:"Phase 2 · Pre-Sell",text:"Post founding member offer once per community — as a story, not an ad",done:false},
+  {id:"j8",phase:"Phase 2 · Pre-Sell",text:"Validation gate: 15+ pay → build. Fewer than 5 pay → adjust positioning before building anything.",done:false},
+  {id:"j9",phase:"Phase 2 · Pre-Sell",text:"Run founding member feedback sessions. Confirm the 3 highest-value features (likely ATS scoring, cover letters, job tracker) — MVP = those 3 only",done:false},
+  {id:"j10",phase:"Phase 3 · Build MVP",text:"Build in Base44 or similar: ATS Analysis, Cover Letter Generator, and Job Tracker ONLY. Do not build all 11 features yet.",done:false},
+  {id:"j11",phase:"Phase 3 · Build MVP",text:"Set up user accounts and login (built into most app builders)",done:false},
+  {id:"j12",phase:"Phase 3 · Build MVP",text:"Set up Stripe billing: $19/mo basic, $29/mo full access, 7-day free trial",done:false},
+  {id:"j13",phase:"Phase 3 · Build MVP",text:"Move the Anthropic API key to the backend — users should never see or manage it",done:false},
+  {id:"j14",phase:"Phase 3 · Build MVP",text:"Buy a real domain (e.g. JobApplyKit.com or ApplySmarter.co). Move off GitHub Pages.",done:false},
+  {id:"j15",phase:"Phase 3 · Build MVP",text:"Generate Privacy Policy + Terms of Service using Termly (~1 hour — required before charging anyone legally)",done:false},
+  {id:"j16",phase:"Phase 4 · Launch",text:"Give founding members early access 2 weeks before public launch. Collect bugs, complaints, compliments. Fix bugs. Compliments → testimonials.",done:false},
+  {id:"j17",phase:"Phase 4 · Launch",text:"Launch on Product Hunt on a Tuesday or Wednesday morning with a demo video (paste JD → finished cover letter)",done:false},
+  {id:"j18",phase:"Phase 4 · Launch",text:"Post launch story on r/recruitinghell and r/jobs — not an ad, a story. 'I spent months getting ghosted in my own job search so I built a tool.'",done:false},
+  {id:"j19",phase:"Phase 4 · Launch",text:"Reach out to 10 career coaches on LinkedIn. Offer free access in exchange for sharing with their audience.",done:false},
+  {id:"j20",phase:"Phase 4 · Launch",text:"Post Product Hunt result on LinkedIn. Tag the communities that helped. Creates a second visibility wave.",done:false},
+  {id:"j21",phase:"Phase 5 · Grow",text:"Unlock remaining features one at a time (Interview Prep, LinkedIn Outreach, Recruiter Vetting, Salary Intel) — email users each unlock as a retention event",done:false},
+  {id:"j22",phase:"Phase 5 · Grow",text:"Write 2 SEO articles/week: 'how to beat ATS screening,' 'cover letter for [role],' 'how to vet a recruiter before submitting'",done:false},
+  {id:"j23",phase:"Phase 5 · Grow",text:"Add affiliate commissions: reach out to resume writers, LinkedIn profile writers, career coaches. Offer 30% recurring commission.",done:false},
+  {id:"j24",phase:"Phase 5 · Grow",text:"Collect and showcase results: 'User got an interview within 3 days.' Social proof is your top conversion lever.",done:false},
+  {id:"j25",phase:"Phase 5 · Grow",text:"At $3K MRR: post build story on Indie Hackers. The community will send a meaningful wave of users at zero cost.",done:false},
+];
+
+const HAIR_TASKS = [
+  {id:"h1",phase:"Phase 1 · Foundation",text:"Narrow launch audience: women with 3C–4C high-porosity hair in a growth phase who have already spent significant money on products that haven't worked",done:false},
+  {id:"h2",phase:"Phase 1 · Foundation",text:"Start TikTok and/or Instagram TODAY. Post science content 3x/week: why high-porosity hair needs LCO not LOC, what DHT does to follicles, why diet affects 40% of hair growth",done:false},
+  {id:"h3",phase:"Phase 1 · Foundation",text:"Post your own hair journey: before photos, week-by-week updates, Chebe butter recipe with science explanations. Your personal results ARE your marketing.",done:false},
+  {id:"h4",phase:"Phase 1 · Foundation",text:"Join and become a trusted voice in r/NaturalHair, r/BlackHair, r/CurlyHair, Facebook 'Natural Hair Journey' and '4C Hair Care' groups. Answer with depth. No pitching yet.",done:false},
+  {id:"h5",phase:"Phase 1 · Foundation",text:"Identify 20 women matching your exact target profile. DM them: offer free 4-week protocol trial in exchange for honest feedback and progress photos",done:false},
+  {id:"h6",phase:"Phase 2 · Pre-Sell",text:"Offer 30 'Founding Member' spots at $29 one-time for lifetime access. Frame as: personalized protocol + shape the product + locked-in lifetime access",done:false},
+  {id:"h7",phase:"Phase 2 · Pre-Sell",text:"Post founding member offer once per community as a story: 'I spent years figuring out what works for my 3C/4A hair. I turned it into a system. First 30 get it free forever.'",done:false},
+  {id:"h8",phase:"Phase 2 · Pre-Sell",text:"Validation gate: 20+ pay → build. Fewer than 10 pay → adjust positioning (audience likely still too broad)",done:false},
+  {id:"h9",phase:"Phase 2 · Pre-Sell",text:"4-week beta: confirm daily-use features. Wash day protocol + push notifications likely top list. Confirm if calendar export and product analyzer land or confuse.",done:false},
+  {id:"h10",phase:"Phase 3 · Build MVP",text:"Build dynamic onboarding questionnaire FIRST: 10–15 questions (hair type, porosity, goals, products owned, health context) → generates custom protocol. This IS the product.",done:false},
+  {id:"h11",phase:"Phase 3 · Build MVP",text:"Build wash day tracker and push notification reminders — these drive daily retention.",done:false},
+  {id:"h12",phase:"Phase 3 · Build MVP",text:"Build supplement and diet tracker with timing plan — genuine differentiator no competitor has",done:false},
+  {id:"h13",phase:"Phase 3 · Build MVP",text:"Set up Stripe: $9.99/mo basic (protocol + tracker), $14.99/mo full (adds supplement tracker, product analyzer, calendar export). 7-day free trial.",done:false},
+  {id:"h14",phase:"Phase 3 · Build MVP",text:"Build calendar export — your killer differentiator. One click imports full wash day schedule, DC reminders, supplement timing into Google Calendar.",done:false},
+  {id:"h15",phase:"Phase 3 · Build MVP",text:"Buy a real domain (e.g. HairProtocol.app or TrueHairMethod.com)",done:false},
+  {id:"h16",phase:"Phase 4 · Launch",text:"Give founding members early access 2 weeks before launch. Ask: what result have you seen? What would you tell a friend? Those answers = testimonials + marketing copy.",done:false},
+  {id:"h17",phase:"Phase 4 · Launch",text:"Create one TikTok showing before/after of your own hair + what the protocol does. NOT a demo — a results video. Goal: organic sharing in natural hair communities.",done:false},
+  {id:"h18",phase:"Phase 4 · Launch",text:"Launch on Product Hunt. Demo: onboarding quiz → fully personalized protocol in under 2 minutes. That's the wow moment.",done:false},
+  {id:"h19",phase:"Phase 4 · Launch",text:"Post on r/NaturalHair and r/BlackHair launch day as a story: 'I spent 3 years and hundreds of dollars figuring out what works for high-porosity 4A hair. Built a system so you don't have to.'",done:false},
+  {id:"h20",phase:"Phase 4 · Launch",text:"Reach out to 10 mid-size natural hair TikTok/YouTube influencers (50K–500K followers). Offer free lifetime access for an honest review video.",done:false},
+  {id:"h21",phase:"Phase 5 · Grow",text:"Add affiliate product links inside protocol recommendations. When the app recommends Oribe or JBCO, link with your affiliate ID. Doubles revenue per user with zero extra work.",done:false},
+  {id:"h22",phase:"Phase 5 · Grow",text:"Write SEO content: 'best deep conditioner for high porosity hair,' '4C hair growth tips,' 'LOC vs LCO for 4A hair,' 'how to stop hair breakage'",done:false},
+  {id:"h23",phase:"Phase 5 · Grow",text:"Build a free standalone 'Hair Type Quiz' (5 questions, no account needed) → offer full system at end. Share everywhere — this is your top-of-funnel lead generator.",done:false},
+  {id:"h24",phase:"Phase 5 · Grow",text:"Partner with 2–3 Black-owned hair care brands you already recommend. Co-marketing: they mention the app, you feature their products. Free distribution to exact target customer.",done:false},
+  {id:"h25",phase:"Phase 5 · Grow",text:"At $2K MRR: post build story on Indie Hackers AND in natural hair Facebook groups simultaneously. 'A Black woman built this for herself and for us' is a moat no funded company can replicate.",done:false},
+];
+
+const mkTasks = (prefix) => [
+  {id:`${prefix}1`,phase:"Phase 1 · Foundation",text:"Define your specific target user in one sentence",done:false},
+  {id:`${prefix}2`,phase:"Phase 1 · Foundation",text:"Set up a landing page with email capture and waitlist CTA",done:false},
+  {id:`${prefix}3`,phase:"Phase 1 · Foundation",text:"Join 3–5 communities where your target user is active — help first, no pitching yet",done:false},
+  {id:`${prefix}4`,phase:"Phase 1 · Foundation",text:"Identify 20–30 potential customers and DM them for 20-min feedback sessions",done:false},
+  {id:`${prefix}5`,phase:"Phase 2 · Pre-Sell",text:"Create a 'Founding Member' offer at a discounted one-time price",done:false},
+  {id:`${prefix}6`,phase:"Phase 2 · Pre-Sell",text:"Post founding member offer once per community (as a story, not an ad)",done:false},
+  {id:`${prefix}7`,phase:"Phase 2 · Pre-Sell",text:"Validation gate: 15+ pay = build. Fewer than 5 pay = adjust positioning.",done:false},
+  {id:`${prefix}8`,phase:"Phase 2 · Pre-Sell",text:"Run feedback sessions to confirm the 3 highest-value core features",done:false},
+  {id:`${prefix}9`,phase:"Phase 3 · Build MVP",text:"Build only the 3 confirmed highest-value features — nothing more",done:false},
+  {id:`${prefix}10`,phase:"Phase 3 · Build MVP",text:"Set up user accounts, authentication, and Stripe billing with a free trial",done:false},
+  {id:`${prefix}11`,phase:"Phase 3 · Build MVP",text:"Buy a real domain, move to proper hosting, generate Privacy Policy + ToS",done:false},
+  {id:`${prefix}12`,phase:"Phase 4 · Launch",text:"Give founding members early access 2 weeks before public launch",done:false},
+  {id:`${prefix}13`,phase:"Phase 4 · Launch",text:"Launch on Product Hunt with a demo video showing the core wow moment",done:false},
+  {id:`${prefix}14`,phase:"Phase 4 · Launch",text:"Post launch story in each community you have been active in",done:false},
+  {id:`${prefix}15`,phase:"Phase 4 · Launch",text:"Reach out to 10 influencers or potential partners for co-promotion",done:false},
+  {id:`${prefix}16`,phase:"Phase 5 · Grow",text:"Unlock additional features one at a time — each unlock is a retention event",done:false},
+  {id:`${prefix}17`,phase:"Phase 5 · Grow",text:"Start SEO content strategy targeting your audience's top search terms",done:false},
+  {id:`${prefix}18`,phase:"Phase 5 · Grow",text:"Add an affiliate or partnership revenue layer",done:false},
+  {id:`${prefix}19`,phase:"Phase 5 · Grow",text:"Collect and showcase user results and testimonials prominently",done:false},
+  {id:`${prefix}20`,phase:"Phase 5 · Grow",text:"Post build story on Indie Hackers at $2K–$3K MRR",done:false},
+];
+
+const BLANK_BMC = {keyPartners:"",keyActivities:"",keyResources:"",valuePropositions:"",customerRelationships:"",channels:"",customerSegments:"",costStructure:"",revenueStreams:""};
+const BLANK_BRIEF = {name:"",problem:"",targetAudience:"",valueProp:"",productType:"",existingWork:"",competitors:"",uniqueEdge:""};
+
+const INIT_BIZ = [
+  {
+    id:"job-toolkit",name:"Job Application Toolkit",color:J.sapphire,status:"Active",
+    brief:{name:"Job Application Toolkit",problem:"Job seekers spend hours on applications rejected by ATS algorithms before a human ever sees them. The process is opaque and demoralizing.",targetAudience:"Mid-to-senior level white-collar professionals in design, strategy, or operations who have been applying 4+ weeks and keep getting ghosted",valueProp:"The only AI job search tool covering the complete application workflow — from ATS scoring to recruiter vetting — for serious job seekers",productType:"PWA / Subscription SaaS",existingWork:"caraabrown.github.io/jobsearchtoolkit — functional prototype hardcoded to founder's profile",competitors:"Rezi ($225K MRR), Jobscan ($49/mo), Teal ($29/mo)",uniqueEdge:"Only tool covering full workflow including recruiter vetting and salary intel — features competitors don't offer"},
+    research:"EFFORT\nHigh — 3 to 4 months. Strip personal data, build backend + auth, abstract API key, add Stripe, generalize resume upload.\n\nFAIR MARKET PRICE\n$19–$29/mo. Teal is $29/mo, Jobscan $49/mo. Justify $25/mo with a freemium tier.\n\nMARKET SIZE\n~12–15M active white-collar job seekers in the US. 5–8% would pay (~600K–1.2M addressable).\n\nCOST TO MARKET\n$18K–$45K with contractors. $3K–$8K solo with AI assistance.\n\nTIME TO MARKET\n4–6 months solo. 2–3 months with part-time contractor.\n\n6-MONTH INCOME\n200–400 subscribers = $4K–$10K/mo by month 6. Constant year-round demand.",
+    tasks:JOB_TASKS,contacts:[],
+    links:[{id:"l1",label:"Live Prototype",url:"https://caraabrown.github.io/jobsearchtoolkit/"},{id:"l2",label:"GitHub Repo",url:"https://github.com/caraabrown/jobsearchtoolkit"},{id:"l3",label:"Competitor: Teal",url:"https://www.tealhq.com"},{id:"l4",label:"Competitor: Rezi",url:"https://www.rezi.ai"},{id:"l5",label:"r/recruitinghell",url:"https://reddit.com/r/recruitinghell"}],
+    bmc:{keyPartners:"Anthropic (AI API), Stripe (payments), career coaches (affiliates), resume writing services (affiliates)",keyActivities:"AI resume analysis, cover letter generation, job tracking, interview prep, recruiter vetting",keyResources:"Anthropic API integration, job search domain expertise, founder's UX/design background",valuePropositions:"Complete AI-powered job application workflow from ATS scoring to salary negotiation — built for serious job seekers who want results, not just another tool",customerRelationships:"Self-service SaaS, community-driven, email nurture, career coach partnerships",channels:"LinkedIn content, Reddit communities, Product Hunt, SEO, career coach referrals",customerSegments:"Mid-to-senior white-collar professionals actively job hunting, particularly in design, strategy, and operations roles",costStructure:"Anthropic API (~$0.01–0.05/use), hosting (Vercel/Supabase), Stripe fees (2.9%), domain, content creation",revenueStreams:"$19/mo basic, $29/mo full access. Affiliate commissions from career coaches and resume services (30% recurring)."},
+  },
+  {
+    id:"hair-protocol",name:"Hair Protocol",color:J.amethyst,status:"Active",
+    brief:{name:"Hair Protocol",problem:"Women with textured hair spend months and hundreds of dollars on trial and error with products that don't work for their specific hair type, porosity, and goals.",targetAudience:"Women with 3C–4C high-porosity textured hair in a growth phase who have already wasted significant money on products that didn't work",valueProp:"The only science-backed, personalized hair care system for women with textured hair — no more trial and error, just a precise protocol built for your exact hair profile",productType:"PWA / Subscription SaaS",existingWork:"caraabrown.github.io/haircarev2 — detailed prototype hardcoded to founder's hair profile",competitors:"Generic hair apps, YouTube tutorials, trial-and-error product purchases. No direct competitor with this level of science depth.",uniqueEdge:"Science-backed explanations (DHT, pH, vasodilation), Ayurvedic + professional integration, supplement tracking, calendar export"},
+    research:"EFFORT\nModerate-to-High — 4 to 5 months. Main lift is building a dynamic profile engine that adapts all content to user answers.\n\nFAIR MARKET PRICE\n$9–$15/mo. Natural hair community spends $100–$400/mo on products, so $10–$12/mo for a personalized system is an easy sell.\n\nMARKET SIZE\n~20M natural hair wearers in US actively managing complex routines. UK, Nigeria, Brazil, Caribbean add millions more. 3–5% paying = 600K–1M addressable.\n\nCOST TO MARKET\n$12K–$35K with contractors. $2.5K–$6K solo with AI.\n\nTIME TO MARKET\n4–6 months solo. 2–3 months with part-time dev.\n\n6-MONTH INCOME\n300–700 subscribers = $3K–$8.4K/mo by month 6. Affiliate revenue from product recommendations adds significant additional layer. Higher viral ceiling than the job toolkit.",
+    tasks:HAIR_TASKS,contacts:[],
+    links:[{id:"l1",label:"Live Prototype",url:"https://caraabrown.github.io/haircarev2/"},{id:"l2",label:"r/NaturalHair",url:"https://reddit.com/r/NaturalHair"},{id:"l3",label:"r/BlackHair",url:"https://reddit.com/r/BlackHair"},{id:"l4",label:"Examine.com (benchmark)",url:"https://examine.com"},{id:"l5",label:"Product Hunt: Hair Apps",url:"https://www.producthunt.com/search?q=natural+hair"}],
+    bmc:{keyPartners:"Anthropic (AI API), Amazon Affiliates, Black-owned hair brands, TikTok/YouTube influencers (50K–500K followers)",keyActivities:"Dynamic protocol generation, supplement tracking, wash day reminders, progress tracking, product recommendations",keyResources:"Founder's deep hair science expertise, personal hair journey content, Anthropic API",valuePropositions:"A personalized, science-backed hair care system that eliminates trial and error — your exact protocol based on your hair type, porosity, goals, products, and health context",customerRelationships:"Community-first, founder authenticity, science education content, push notification reminders",channels:"TikTok, YouTube, Instagram, Reddit (r/NaturalHair, r/BlackHair), Product Hunt, SEO, influencer partnerships",customerSegments:"Women with 3C–4C textured hair trying to grow, retain length, or recover from damage — frustrated with generic advice",costStructure:"Anthropic API costs, hosting, Stripe fees, influencer gifting (free access), domain",revenueStreams:"$9.99/mo basic, $14.99/mo full. Amazon affiliate commissions on product recommendations. Brand partnerships."},
+  },
+];
+
+const pct = (tasks) => !tasks.length ? 0 : Math.round(tasks.filter(t=>t.done).length/tasks.length*100);
+const groupBy = (arr,key) => arr.reduce((a,i)=>{ (a[i[key]]=a[i[key]]||[]).push(i); return a; },{});
+const uid = () => Math.random().toString(36).slice(2,9);
+
+const PHASE_META = {
+  "Phase 1 · Foundation": { color: J.topaz    },
+  "Phase 2 · Pre-Sell":   { color: J.gold     },
+  "Phase 3 · Build MVP":  { color: J.emerald  },
+  "Phase 4 · Launch":     { color: J.ruby     },
+  "Phase 5 · Grow":       { color: J.amethyst },
+};
+
+const BMC_CELLS = [
+  {key:"keyPartners",          label:"Key Partners",           col:"1/3",  row:"1/3"},
+  {key:"keyActivities",        label:"Key Activities",         col:"3/5",  row:"1/2"},
+  {key:"valuePropositions",    label:"Value Propositions",     col:"5/7",  row:"1/3"},
+  {key:"customerRelationships",label:"Customer Relationships", col:"7/9",  row:"1/2"},
+  {key:"customerSegments",     label:"Customer Segments",      col:"9/11", row:"1/3"},
+  {key:"keyResources",         label:"Key Resources",          col:"3/5",  row:"2/3"},
+  {key:"channels",             label:"Channels",               col:"7/9",  row:"2/3"},
+  {key:"costStructure",        label:"Cost Structure",         col:"1/6",  row:"3/4"},
+  {key:"revenueStreams",        label:"Revenue Streams",        col:"6/11", row:"3/4"},
+];
+const BMC_COLORS = {keyPartners:J.topaz,keyActivities:J.sapphire,valuePropositions:J.emerald,customerRelationships:J.gold,customerSegments:J.amethyst,keyResources:J.sapphire,channels:J.gold,costStructure:J.ruby,revenueStreams:J.emerald};
+
+// ─── ATOMS ────────────────────────────────────────────────────
+function Ring({p=0,size=100,stroke=7,color=J.emerald,label}) {
+  const r=(size-stroke)/2, c=2*Math.PI*r, d=Math.max(0,Math.min(1,p/100))*c;
+  return (
+    <div style={{display:"flex",flexDirection:"column",alignItems:"center",gap:8}}>
+      <div style={{position:"relative",width:size,height:size}}>
+        <svg width={size} height={size} style={{transform:"rotate(-90deg)"}}>
+          <circle cx={size/2} cy={size/2} r={r} fill="none" stroke={J.dim} strokeWidth={stroke}/>
+          <circle cx={size/2} cy={size/2} r={r} fill="none" stroke={color} strokeWidth={stroke}
+            strokeDasharray={`${d} ${c}`} strokeLinecap="round" style={{transition:"stroke-dasharray .8s cubic-bezier(.4,0,.2,1)"}}/>
+        </svg>
+        <div style={{position:"absolute",inset:0,display:"flex",alignItems:"center",justifyContent:"center"}}>
+          <span style={{fontSize:size*.19,fontWeight:700,fontFamily:"'Raleway',sans-serif",color:J.text}}>{Math.round(p)}%</span>
+        </div>
+      </div>
+      {label&&<span style={{fontSize:10,fontFamily:"'Courier Prime',monospace",color:J.muted,letterSpacing:"0.14em",textTransform:"uppercase",textAlign:"center"}}>{label}</span>}
+    </div>
+  );
+}
+
+function InlineField({label,value,onChange,multi,placeholder,accent=J.emerald}) {
+  return (
+    <div style={{marginBottom:22}}>
+      <div style={{fontSize:9,fontFamily:"'Courier Prime',monospace",color:accent,letterSpacing:"0.18em",textTransform:"uppercase",marginBottom:7}}>{label}</div>
+      {multi
+        ? <textarea value={value} onChange={e=>onChange(e.target.value)} placeholder={placeholder||""} rows={3}
+            style={{background:"transparent",border:"none",borderLeft:`2px solid ${J.dim}`,color:J.text,fontFamily:"'Oxygen',sans-serif",fontSize:13,padding:"4px 0 4px 12px",outline:"none",resize:"vertical",width:"100%",lineHeight:1.7,boxSizing:"border-box"}}/>
+        : <input value={value} onChange={e=>onChange(e.target.value)} placeholder={placeholder||""}
+            style={{background:"transparent",border:"none",borderBottom:`1px solid ${J.dim}`,color:J.text,fontFamily:"'Oxygen',sans-serif",fontSize:13,padding:"5px 0",outline:"none",width:"100%"}}/>
+      }
+    </div>
+  );
+}
+
+function Section({label,children,accent=J.emerald,defaultOpen=false}) {
+  const [open,setOpen]=useState(defaultOpen);
+  return (
+    <div style={{marginBottom:0}}>
+      <button onClick={()=>setOpen(o=>!o)} style={{width:"100%",background:"none",border:"none",cursor:"pointer",display:"flex",alignItems:"center",gap:14,padding:"22px 0",borderBottom:`1px solid ${J.line}`}}>
+        <span style={{width:3,height:20,background:open?accent:J.dim,borderRadius:2,transition:"background .2s",flexShrink:0}}/>
+        <span style={{fontSize:10,fontFamily:"'Courier Prime',monospace",color:open?accent:J.muted,letterSpacing:"0.16em",textTransform:"uppercase",flex:1,textAlign:"left"}}>{label}</span>
+        <span style={{color:J.dim,fontSize:10,fontFamily:"'Courier Prime',monospace",transform:open?"rotate(180deg)":"",transition:"transform .2s"}}>▾</span>
+      </button>
+      {open&&<div style={{paddingTop:28,paddingBottom:12}}>{children}</div>}
+    </div>
+  );
+}
+
+function Btn({onClick,children,variant="primary",style={}}) {
+  const vs={
+    primary:{background:J.emerald,color:"#05140E",fontWeight:700,border:"none"},
+    ghost:{background:"transparent",color:J.muted,border:`1px solid ${J.dim}`},
+    danger:{background:"transparent",color:J.ruby,border:`1px solid ${J.ruby}44`},
+  };
+  return <button onClick={onClick} style={{cursor:"pointer",borderRadius:3,fontFamily:"'Oxygen',sans-serif",fontSize:12,padding:"8px 18px",letterSpacing:"0.04em",transition:"opacity .15s",...vs[variant],...style}} onMouseEnter={e=>e.target.style.opacity=".7"} onMouseLeave={e=>e.target.style.opacity="1"}>{children}</button>;
+}
+
+// ─── HOME ─────────────────────────────────────────────────────
+function HomeTab({businesses}) {
+  const all=businesses.flatMap(b=>b.tasks);
+  const done=all.filter(t=>t.done).length;
+  const overall=pct(all);
+  return (
+    <div>
+      <div style={{textAlign:"center",padding:"52px 0 60px"}}>
+        <div style={{fontSize:9,fontFamily:"'Courier Prime',monospace",color:J.muted,letterSpacing:"0.28em",textTransform:"uppercase",marginBottom:36}}>Business Experiment Dojo</div>
+        <Ring p={overall} size={190} stroke={11} color={J.emerald} label="Overall Progress"/>
+        <div style={{marginTop:28,fontSize:11,fontFamily:"'Courier Prime',monospace",color:J.muted,letterSpacing:"0.12em"}}>
+          {done} / {all.length} tasks complete &nbsp;·&nbsp; {businesses.length} active experiments
+        </div>
+      </div>
+      <div style={{borderTop:`1px solid ${J.line}`,paddingTop:44}}>
+        {businesses.map((biz,i)=>{
+          const p=pct(biz.tasks), d=biz.tasks.filter(t=>t.done).length;
+          const grouped=groupBy(biz.tasks,"phase");
+          return (
+            <div key={biz.id} style={{paddingBottom:44,marginBottom:44,borderBottom:i<businesses.length-1?`1px solid ${J.line}`:"none"}}>
+              <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",marginBottom:30}}>
+                <div>
+                  <div style={{fontSize:26,fontFamily:"'Raleway',sans-serif",fontWeight:800,color:J.text,letterSpacing:"0.04em",marginBottom:8}}>{biz.name}</div>
+                  <div style={{fontSize:10,fontFamily:"'Courier Prime',monospace",color:biz.color,letterSpacing:"0.12em"}}>{biz.status} &nbsp;·&nbsp; {d}/{biz.tasks.length} tasks</div>
+                </div>
+                <Ring p={p} size={74} stroke={5} color={biz.color}/>
+              </div>
+              <div style={{display:"flex",flexDirection:"column",gap:12}}>
+                {Object.entries(PHASE_META).map(([ph,{color}])=>{
+                  const pts=(grouped[ph]||[]);
+                  if(!pts.length) return null;
+                  const pp=pct(pts);
+                  const short=ph.split("·")[1]?.trim()||ph;
+                  return (
+                    <div key={ph} style={{display:"flex",alignItems:"center",gap:16}}>
+                      <div style={{fontSize:10,fontFamily:"'Courier Prime',monospace",color:J.muted,width:92,flexShrink:0,letterSpacing:"0.07em"}}>{short}</div>
+                      <div style={{flex:1,height:4,background:J.dim,borderRadius:2,overflow:"hidden"}}>
+                        <div style={{height:"100%",width:`${pp}%`,background:color,borderRadius:2,transition:"width .6s ease"}}/>
+                      </div>
+                      <div style={{fontSize:10,fontFamily:"'Courier Prime',monospace",color:J.muted,width:36,textAlign:"right"}}>{pts.filter(t=>t.done).length}/{pts.length}</div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
+// ─── DASHBOARD ────────────────────────────────────────────────
+function DashboardTab({businesses}) {
+  return (
+    <div>
+      <div style={{paddingBottom:36,borderBottom:`1px solid ${J.line}`,marginBottom:44}}>
+        <div style={{fontSize:9,fontFamily:"'Courier Prime',monospace",color:J.muted,letterSpacing:"0.22em",textTransform:"uppercase",marginBottom:12}}>Progress Dashboard</div>
+        <div style={{fontSize:30,fontFamily:"'Raleway',sans-serif",fontWeight:800,color:J.text,letterSpacing:"0.03em"}}>Task Completion by Phase</div>
+      </div>
+      {businesses.map((biz,bi)=>(
+        <div key={biz.id} style={{marginBottom:52}}>
+          <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:24}}>
+            <div>
+              <div style={{fontSize:18,fontFamily:"'Raleway',sans-serif",fontWeight:700,color:J.text,letterSpacing:"0.05em"}}>{biz.name}</div>
+              <div style={{fontSize:10,fontFamily:"'Courier Prime',monospace",color:J.muted,marginTop:4,letterSpacing:"0.1em"}}>{biz.tasks.filter(t=>t.done).length} / {biz.tasks.length} total</div>
+            </div>
+            <Ring p={pct(biz.tasks)} size={56} stroke={4} color={biz.color}/>
+          </div>
+          <div style={{display:"flex",flexDirection:"column",gap:14}}>
+            {Object.entries(PHASE_META).map(([ph,{color}])=>{
+              const pts=(groupBy(biz.tasks,"phase")[ph]||[]);
+              if(!pts.length) return null;
+              const pp=pct(pts);
+              return (
+                <div key={ph}>
+                  <div style={{display:"flex",justifyContent:"space-between",marginBottom:7}}>
+                    <span style={{fontSize:9,fontFamily:"'Courier Prime',monospace",color,letterSpacing:"0.14em",textTransform:"uppercase"}}>{ph}</span>
+                    <span style={{fontSize:10,fontFamily:"'Courier Prime',monospace",color:J.muted}}>{pts.filter(t=>t.done).length}/{pts.length} &nbsp; {pp}%</span>
+                  </div>
+                  <div style={{height:8,background:J.dim,borderRadius:4,overflow:"hidden"}}>
+                    <div style={{height:"100%",width:`${pp}%`,background:color,borderRadius:4,transition:"width .6s ease"}}/>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+          {bi<businesses.length-1&&<div style={{borderBottom:`1px solid ${J.line}`,marginTop:44}}/>}
+        </div>
+      ))}
+    </div>
+  );
+}
+
+// ─── IDEA LAB ─────────────────────────────────────────────────
+function IdeaLabTab({onCreateBusiness}) {
+  const [step,setStep]=useState(1);
+  const [brief,setBrief]=useState(BLANK_BRIEF);
+  const [answers,setAnswers]=useState("");
+  const [copied,setCopied]=useState(false);
+  const upd=(k,v)=>setBrief(b=>({...b,[k]:v}));
+
+  const prompt=`I have a new business idea I'd like you to assess. Here are the details:
+
+Business Name: ${brief.name||"[not yet named]"}
+Problem Being Solved: ${brief.problem||"[not provided]"}
+Target Audience: ${brief.targetAudience||"[not provided]"}
+Core Value Proposition: ${brief.valueProp||"[not provided]"}
+Product / Service Type: ${brief.productType||"[not provided]"}
+Existing Work or Prototype: ${brief.existingWork||"[none]"}
+Known Competitors: ${brief.competitors||"[unknown]"}
+Unique Edge Over Competitors: ${brief.uniqueEdge||"[not provided]"}
+
+Please assess this idea and give me specific answers to each of these 6 questions:
+
+1. Level of effort needed to develop this to commercial viability (what specifically needs to be built or changed)
+2. Estimated fair market value of a monthly subscription price
+3. Estimated number of people in the target market who would actually pay for this
+4. Estimated cost to bring this to market (with and without a contractor)
+5. Estimated time to bring this to market
+6. Viability expressed as a realistic 6-month income projection
+
+Please be specific, honest, and base your answers on real comparable products where possible.`;
+
+  const doCopy=()=>{try{navigator.clipboard.writeText(prompt)}catch(e){}; setCopied(true); setTimeout(()=>setCopied(false),2000);};
+  const canCreate=brief.name.trim()&&answers.trim();
+  const handleCreate=()=>{
+    const id=uid();
+    onCreateBusiness({id,name:brief.name,color:J.topaz,status:"Ideation",brief:{...brief},research:answers,tasks:mkTasks(id),contacts:[],links:[],bmc:{...BLANK_BMC}});
+    setBrief(BLANK_BRIEF); setAnswers(""); setStep(1);
+  };
+
+  const steps=["Brief","Generate Prompt","Paste Answers","Launch Experiment"];
+
+  return (
+    <div>
+      <div style={{paddingBottom:36,borderBottom:`1px solid ${J.line}`,marginBottom:44}}>
+        <div style={{fontSize:9,fontFamily:"'Courier Prime',monospace",color:J.muted,letterSpacing:"0.22em",textTransform:"uppercase",marginBottom:12}}>Idea Lab</div>
+        <div style={{fontSize:30,fontFamily:"'Raleway',sans-serif",fontWeight:800,color:J.text,letterSpacing:"0.03em"}}>New Business Experiment</div>
+        <div style={{fontSize:13,color:J.muted,fontFamily:"'Oxygen',sans-serif",marginTop:10,lineHeight:1.7}}>Fill the brief → generate a research prompt → paste Claude's answers → create your experiment tab.</div>
+      </div>
+
+      <div style={{display:"flex",alignItems:"center",gap:0,marginBottom:44}}>
+        {steps.map((s,i)=>(
+          <div key={i} style={{display:"flex",alignItems:"center",flex:1}}>
+            <div onClick={()=>setStep(i+1)} style={{cursor:"pointer",display:"flex",alignItems:"center",gap:10}}>
+              <div style={{width:28,height:28,borderRadius:"50%",display:"flex",alignItems:"center",justifyContent:"center",background:step===i+1?J.emerald:step>i+1?J.dim:"transparent",border:`1px solid ${step>=i+1?J.emerald:J.dim}`,color:step===i+1?"#05140E":step>i+1?J.emerald:J.muted,fontSize:11,fontWeight:700,fontFamily:"'Raleway',sans-serif",flexShrink:0,transition:"all .2s"}}>{i+1}</div>
+              <span style={{fontSize:9,fontFamily:"'Courier Prime',monospace",color:step>=i+1?J.emerald:J.muted,letterSpacing:"0.1em",textTransform:"uppercase",whiteSpace:"nowrap"}}>{s}</span>
+            </div>
+            {i<steps.length-1&&<div style={{flex:1,height:1,background:J.dim,margin:"0 14px"}}/>}
+          </div>
+        ))}
+      </div>
+
+      {step===1&&(
+        <div>
+          <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:"0 48px"}}>
+            <InlineField label="Business Name" value={brief.name} onChange={v=>upd("name",v)} placeholder="e.g. HairProtocol, JobApplyKit…"/>
+            <InlineField label="Product / Service Type" value={brief.productType} onChange={v=>upd("productType",v)} placeholder="PWA, SaaS, Marketplace, Digital Download…"/>
+          </div>
+          <InlineField label="Problem Being Solved" value={brief.problem} onChange={v=>upd("problem",v)} multi placeholder="What specific pain point are you solving? For whom?"/>
+          <InlineField label="Target Audience" value={brief.targetAudience} onChange={v=>upd("targetAudience",v)} placeholder="Be specific — who exactly is your first customer?"/>
+          <InlineField label="Core Value Proposition" value={brief.valueProp} onChange={v=>upd("valueProp",v)} multi placeholder="What do you do, for whom, and what makes it different?"/>
+          <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:"0 48px"}}>
+            <InlineField label="Existing Work or Prototype" value={brief.existingWork} onChange={v=>upd("existingWork",v)} placeholder="URLs, prototypes, prior work…"/>
+            <InlineField label="Known Competitors" value={brief.competitors} onChange={v=>upd("competitors",v)} placeholder="Who else solves this? Their pricing?"/>
+          </div>
+          <InlineField label="Your Unique Edge" value={brief.uniqueEdge} onChange={v=>upd("uniqueEdge",v)} multi placeholder="What do you have or know that no competitor has?"/>
+          <div style={{marginTop:20}}><Btn onClick={()=>setStep(2)}>Generate Claude Prompt →</Btn></div>
+        </div>
+      )}
+
+      {step===2&&(
+        <div>
+          <div style={{fontSize:12,color:J.muted,fontFamily:"'Oxygen',sans-serif",lineHeight:1.7,marginBottom:18}}>Copy this prompt, open a new Claude chat, and paste it. Come back with the answers for Step 3.</div>
+          <pre style={{background:J.surface,borderLeft:`3px solid ${J.emerald}`,padding:22,fontFamily:"'Courier Prime',monospace",fontSize:11,color:J.text,whiteSpace:"pre-wrap",lineHeight:1.9,maxHeight:360,overflowY:"auto",margin:"0 0 22px",borderRadius:"0 4px 4px 0"}}>{prompt}</pre>
+          <div style={{display:"flex",gap:12,flexWrap:"wrap"}}>
+            <Btn onClick={doCopy}>{copied?"✓ Copied!":"Copy Prompt"}</Btn>
+            <Btn onClick={()=>setStep(1)} variant="ghost">← Edit Brief</Btn>
+            <Btn onClick={()=>setStep(3)} variant="ghost">I have the answers →</Btn>
+          </div>
+        </div>
+      )}
+
+      {step===3&&(
+        <div>
+          <div style={{fontSize:12,color:J.muted,fontFamily:"'Oxygen',sans-serif",lineHeight:1.7,marginBottom:18}}>Paste Claude's full response here. It will be saved to your experiment's Research section.</div>
+          <textarea value={answers} onChange={e=>setAnswers(e.target.value)} rows={14} placeholder="Paste Claude's complete response here…"
+            style={{width:"100%",background:J.surface,border:"none",borderLeft:`3px solid ${J.topaz}`,color:J.text,fontFamily:"'Courier Prime',monospace",fontSize:12,padding:"18px",outline:"none",resize:"vertical",boxSizing:"border-box",lineHeight:1.9,borderRadius:"0 4px 4px 0"}}/>
+          <div style={{display:"flex",gap:12,marginTop:18,flexWrap:"wrap"}}>
+            <Btn onClick={()=>setStep(2)} variant="ghost">← Back</Btn>
+            <Btn onClick={()=>setStep(4)}>Preview & Create →</Btn>
+          </div>
+        </div>
+      )}
+
+      {step===4&&(
+        <div>
+          <div style={{fontSize:12,color:J.muted,fontFamily:"'Oxygen',sans-serif",lineHeight:1.7,marginBottom:28}}>Review before creating the experiment tab.</div>
+          <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:"0 48px",marginBottom:32}}>
+            {[["Business Name",brief.name],["Target Audience",brief.targetAudience],["Value Proposition",brief.valueProp],["Product Type",brief.productType]].map(([k,v])=>(
+              <div key={k} style={{marginBottom:20}}>
+                <div style={{fontSize:9,fontFamily:"'Courier Prime',monospace",color:J.topaz,letterSpacing:"0.18em",textTransform:"uppercase",marginBottom:7}}>{k}</div>
+                <div style={{fontSize:13,color:J.text,fontFamily:"'Oxygen',sans-serif",borderBottom:`1px solid ${J.line}`,paddingBottom:8}}>{v||"—"}</div>
+              </div>
+            ))}
+          </div>
+          {!canCreate&&<div style={{fontSize:11,fontFamily:"'Courier Prime',monospace",color:J.gold,marginBottom:16,letterSpacing:"0.08em"}}>⚠ Business name and Claude's answers are required.</div>}
+          <div style={{display:"flex",gap:12,flexWrap:"wrap"}}>
+            <Btn onClick={handleCreate} style={canCreate?{}:{opacity:.3,pointerEvents:"none"}}>Create Experiment Tab →</Btn>
+            <Btn onClick={()=>setStep(3)} variant="ghost">← Edit Answers</Btn>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+// ─── CONTACTS ─────────────────────────────────────────────────
+function ContactsSection({contacts,onChange}) {
+  const add=()=>onChange([...contacts,{id:uid(),name:"",role:"",email:"",notes:""}]);
+  const rm=(id)=>onChange(contacts.filter(c=>c.id!==id));
+  const upd=(id,k,v)=>onChange(contacts.map(c=>c.id===id?{...c,[k]:v}:c));
+  const fi={background:"transparent",border:"none",borderBottom:`1px solid ${J.dim}`,color:J.text,fontFamily:"'Oxygen',sans-serif",fontSize:12,padding:"4px 0",outline:"none",width:"100%"};
+  return (
+    <div>
+      {contacts.length===0&&<div style={{fontSize:13,color:J.muted,fontFamily:"'Oxygen',sans-serif",marginBottom:20,lineHeight:1.8}}>No contacts yet. Add career coaches, influencers, partners, advisors, potential customers.</div>}
+      {contacts.map(c=>(
+        <div key={c.id} style={{borderBottom:`1px solid ${J.line}`,paddingBottom:18,marginBottom:18}}>
+          <div style={{display:"grid",gridTemplateColumns:"1fr 1fr 1fr 1fr",gap:"0 28px",marginBottom:10}}>
+            {[["Name","name"],["Role / Company","role"],["Email or URL","email"],["Notes","notes"]].map(([pl,k])=>(
+              <div key={k}>
+                <div style={{fontSize:8,fontFamily:"'Courier Prime',monospace",color:J.muted,letterSpacing:"0.14em",textTransform:"uppercase",marginBottom:4}}>{pl}</div>
+                <input value={c[k]} onChange={e=>upd(c.id,k,e.target.value)} placeholder={pl} style={fi}/>
+              </div>
+            ))}
+          </div>
+          <Btn onClick={()=>rm(c.id)} variant="danger" style={{fontSize:10,padding:"4px 10px",marginTop:4}}>Remove</Btn>
+        </div>
+      ))}
+      <Btn onClick={add} variant="ghost">+ Add Contact</Btn>
+    </div>
+  );
+}
+
+// ─── LINKS ────────────────────────────────────────────────────
+function LinksSection({links,onChange}) {
+  const add=()=>onChange([...links,{id:uid(),label:"",url:""}]);
+  const rm=(id)=>onChange(links.filter(l=>l.id!==id));
+  const upd=(id,k,v)=>onChange(links.map(l=>l.id===id?{...l,[k]:v}:l));
+  return (
+    <div>
+      {links.length===0&&<div style={{fontSize:13,color:J.muted,fontFamily:"'Oxygen',sans-serif",marginBottom:20,lineHeight:1.8}}>No links yet. Add competitor sites, research articles, community links, prototype URLs.</div>}
+      {links.map(l=>(
+        <div key={l.id} style={{display:"flex",alignItems:"center",gap:18,borderBottom:`1px solid ${J.line}`,paddingBottom:12,marginBottom:12}}>
+          <input value={l.label} onChange={e=>upd(l.id,"label",e.target.value)} placeholder="Label" style={{flex:"0 0 160px",background:"transparent",border:"none",borderBottom:`1px solid ${J.dim}`,color:J.text,fontFamily:"'Oxygen',sans-serif",fontSize:12,padding:"4px 0",outline:"none"}}/>
+          <input value={l.url} onChange={e=>upd(l.id,"url",e.target.value)} placeholder="https://…" style={{flex:1,background:"transparent",border:"none",borderBottom:`1px solid ${J.dim}`,color:J.sapphire,fontFamily:"'Courier Prime',monospace",fontSize:12,padding:"4px 0",outline:"none"}}/>
+          {l.url&&<a href={l.url} target="_blank" rel="noreferrer" style={{color:J.topaz,fontSize:11,fontFamily:"'Courier Prime',monospace",textDecoration:"none",whiteSpace:"nowrap",flexShrink:0,letterSpacing:"0.06em"}}>↗ open</a>}
+          <button onClick={()=>rm(l.id)} style={{background:"none",border:"none",color:J.muted,cursor:"pointer",fontSize:18,padding:"0 4px",flexShrink:0,lineHeight:1}}>&times;</button>
+        </div>
+      ))}
+      <Btn onClick={add} variant="ghost">+ Add Link</Btn>
+    </div>
+  );
+}
+
+// ─── BMC ──────────────────────────────────────────────────────
+function BmcSection({bmc,onChange}) {
+  return (
+    <div>
+      <div style={{fontSize:13,color:J.muted,fontFamily:"'Oxygen',sans-serif",lineHeight:1.8,marginBottom:22}}>
+        Click any cell to edit directly. The Business Model Canvas maps how your business creates, delivers, and captures value across 9 dimensions.
+      </div>
+      <div style={{display:"grid",gridTemplateColumns:"repeat(10,1fr)",gridTemplateRows:"auto auto auto",gap:1,background:J.line,border:`1px solid ${J.line}`,borderRadius:6,overflow:"hidden",minHeight:400}}>
+        {BMC_CELLS.map(cell=>{
+          const color=BMC_COLORS[cell.key];
+          return (
+            <div key={cell.key} style={{gridColumn:cell.col,gridRow:cell.row,background:J.surface,padding:"14px 16px",display:"flex",flexDirection:"column"}}>
+              <div style={{fontSize:8,fontFamily:"'Courier Prime',monospace",color,letterSpacing:"0.16em",textTransform:"uppercase",marginBottom:10,paddingBottom:7,borderBottom:`2px solid ${color}33`}}>{cell.label}</div>
+              <textarea
+                value={bmc[cell.key]}
+                onChange={e=>onChange({...bmc,[cell.key]:e.target.value})}
+                placeholder={`Describe your ${cell.label.toLowerCase()}…`}
+                style={{flex:1,background:"transparent",border:"none",color:J.text,fontFamily:"'Oxygen',sans-serif",fontSize:11,resize:"none",outline:"none",lineHeight:1.75,width:"100%",minHeight:70,cursor:"text"}}
+              />
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
+// ─── RESEARCH ─────────────────────────────────────────────────
+function ResearchSection({research,onChange}) {
+  const [edit,setEdit]=useState(false);
+  return (
+    <div>
+      <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:18}}>
+        <div style={{fontSize:12,color:J.muted,fontFamily:"'Oxygen',sans-serif"}}>Market data, pricing benchmarks, and viability analysis from Claude</div>
+        <Btn onClick={()=>setEdit(!edit)} variant="ghost" style={{fontSize:10,padding:"5px 12px"}}>{edit?"Done":"Edit"}</Btn>
+      </div>
+      {edit
+        ? <textarea value={research} onChange={e=>onChange(e.target.value)} rows={14} style={{width:"100%",background:J.surface,border:"none",borderLeft:`3px solid ${J.topaz}`,color:J.text,fontFamily:"'Courier Prime',monospace",fontSize:12,padding:"18px",outline:"none",resize:"vertical",boxSizing:"border-box",lineHeight:1.9,borderRadius:"0 4px 4px 0"}}/>
+        : <div>
+            {research.split("\n").map((line,i)=>{
+              const cap=line.match(/^[A-Z][A-Z\s\-\/]{3,}$/);
+              if(cap) return <div key={i} style={{fontSize:9,fontFamily:"'Courier Prime',monospace",color:J.topaz,letterSpacing:"0.2em",textTransform:"uppercase",marginTop:28,marginBottom:8}}>{line}</div>;
+              if(!line.trim()) return <div key={i} style={{height:2}}/>;
+              return <div key={i} style={{fontSize:13,color:J.text,lineHeight:1.85,marginBottom:2,fontFamily:"'Oxygen',sans-serif"}}>{line}</div>;
+            })}
+          </div>
+      }
+    </div>
+  );
+}
+
+// ─── CHECKLIST ────────────────────────────────────────────────
+function ChecklistSection({tasks,onChange}) {
+  const grouped=groupBy(tasks,"phase");
+  const toggle=(id)=>onChange(tasks.map(t=>t.id===id?{...t,done:!t.done}:t));
+  const updText=(id,text)=>onChange(tasks.map(t=>t.id===id?{...t,text}:t));
+  const remove=(id)=>onChange(tasks.filter(t=>t.id!==id));
+  const addTask=(phase)=>onChange([...tasks,{id:uid(),phase,text:"",done:false}]);
+  return (
+    <div>
+      {Object.entries(PHASE_META).map(([ph,{color}])=>{
+        const pts=(grouped[ph]||[]);
+        if(!pts.length) return null;
+        const pp=pct(pts);
+        const short=ph.split("·")[1]?.trim()||ph;
+        return (
+          <div key={ph} style={{marginBottom:36}}>
+            <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:16}}>
+              <div style={{fontSize:9,fontFamily:"'Courier Prime',monospace",color,letterSpacing:"0.2em",textTransform:"uppercase"}}>{ph}</div>
+              <div style={{display:"flex",alignItems:"center",gap:14}}>
+                <div style={{width:88,height:3,background:J.dim,borderRadius:2,overflow:"hidden"}}>
+                  <div style={{height:"100%",width:`${pp}%`,background:color,borderRadius:2,transition:"width .4s"}}/>
+                </div>
+                <span style={{fontSize:10,fontFamily:"'Courier Prime',monospace",color:J.muted}}>{pts.filter(t=>t.done).length}/{pts.length}</span>
+              </div>
+            </div>
+            {pts.map(t=>(
+              <div key={t.id} style={{display:"flex",alignItems:"flex-start",gap:14,padding:"11px 0",borderBottom:`1px solid ${J.line}`}}>
+                <div onClick={()=>toggle(t.id)} style={{flexShrink:0,width:18,height:18,borderRadius:3,border:`1.5px solid ${t.done?color:J.dim}`,background:t.done?color:"transparent",cursor:"pointer",marginTop:2,display:"flex",alignItems:"center",justifyContent:"center",transition:"all .2s"}}>
+                  {t.done&&<span style={{color:"#05140E",fontSize:10,fontWeight:900,lineHeight:1}}>✓</span>}
+                </div>
+                <input value={t.text} onChange={e=>updText(t.id,e.target.value)}
+                  style={{flex:1,background:"transparent",border:"none",color:t.done?J.muted:J.text,fontFamily:"'Oxygen',sans-serif",fontSize:13,outline:"none",lineHeight:1.7,textDecoration:t.done?"line-through":"none",padding:0}}/>
+                <button onClick={()=>remove(t.id)} style={{background:"none",border:"none",color:J.dim,cursor:"pointer",fontSize:18,padding:"0 4px",flexShrink:0,lineHeight:1}}>&times;</button>
+              </div>
+            ))}
+            <button onClick={()=>addTask(ph)} style={{background:"none",border:"none",color:J.dim,cursor:"pointer",fontSize:11,fontFamily:"'Courier Prime',monospace",padding:"10px 0 0 32px",letterSpacing:"0.1em"}}>+ add task</button>
+          </div>
+        );
+      })}
+    </div>
+  );
+}
+
+// ─── BUSINESS PAGE ────────────────────────────────────────────
+function BusinessTab({biz,onChange}) {
+  const p=pct(biz.tasks);
+  const done=biz.tasks.filter(t=>t.done).length;
+  const upd=(k,v)=>onChange({...biz,[k]:v});
+  return (
+    <div>
+      <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",paddingBottom:36,borderBottom:`1px solid ${J.line}`,marginBottom:4}}>
+        <div style={{flex:1}}>
+          <div style={{fontSize:9,fontFamily:"'Courier Prime',monospace",color:J.muted,letterSpacing:"0.22em",textTransform:"uppercase",marginBottom:12}}>Business Experiment</div>
+          <div style={{fontSize:36,fontFamily:"'Raleway',sans-serif",fontWeight:800,color:J.text,letterSpacing:"0.04em",lineHeight:1.05,marginBottom:14}}>{biz.name}</div>
+          <div style={{display:"flex",alignItems:"center",gap:24}}>
+            <span style={{fontSize:10,fontFamily:"'Courier Prime',monospace",color:biz.color,letterSpacing:"0.12em"}}>{biz.status}</span>
+            <span style={{fontSize:10,fontFamily:"'Courier Prime',monospace",color:J.muted,letterSpacing:"0.1em"}}>{done}/{biz.tasks.length} tasks</span>
+            <div style={{width:140,height:3,background:J.dim,borderRadius:2,overflow:"hidden"}}>
+              <div style={{height:"100%",width:`${p}%`,background:biz.color,borderRadius:2,transition:"width .6s"}}/>
+            </div>
+          </div>
+        </div>
+        <Ring p={p} size={86} stroke={6} color={biz.color}/>
+      </div>
+
+      <Section label="Brief & Positioning" accent={biz.color} defaultOpen={true}>
+        <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:"0 52px"}}>
+          <InlineField label="Problem" value={biz.brief.problem||""} onChange={v=>upd("brief",{...biz.brief,problem:v})} multi accent={biz.color}/>
+          <InlineField label="Target Audience" value={biz.brief.targetAudience||""} onChange={v=>upd("brief",{...biz.brief,targetAudience:v})} multi accent={biz.color}/>
+          <InlineField label="Product Type" value={biz.brief.productType||""} onChange={v=>upd("brief",{...biz.brief,productType:v})} accent={biz.color}/>
+          <InlineField label="Existing Work" value={biz.brief.existingWork||""} onChange={v=>upd("brief",{...biz.brief,existingWork:v})} accent={biz.color}/>
+          <div style={{gridColumn:"span 2"}}>
+            <InlineField label="Value Proposition" value={biz.brief.valueProp||""} onChange={v=>upd("brief",{...biz.brief,valueProp:v})} multi accent={biz.color}/>
+          </div>
+          <InlineField label="Competitors" value={biz.brief.competitors||""} onChange={v=>upd("brief",{...biz.brief,competitors:v})} multi accent={biz.color}/>
+          <InlineField label="Unique Edge" value={biz.brief.uniqueEdge||""} onChange={v=>upd("brief",{...biz.brief,uniqueEdge:v})} multi accent={biz.color}/>
+        </div>
+      </Section>
+
+      <Section label="Market Research" accent={biz.color}>
+        <ResearchSection research={biz.research} onChange={v=>upd("research",v)}/>
+      </Section>
+
+      <Section label="Business Model Canvas" accent={biz.color}>
+        <BmcSection bmc={biz.bmc} onChange={v=>upd("bmc",v)}/>
+      </Section>
+
+      <Section label={`Go-to-Market Plan  ·  ${done}/${biz.tasks.length} tasks`} accent={biz.color} defaultOpen={true}>
+        <ChecklistSection tasks={biz.tasks} onChange={v=>upd("tasks",v)}/>
+      </Section>
+
+      <Section label={`Contacts & Outreach  ·  ${biz.contacts.length}`} accent={biz.color}>
+        <ContactsSection contacts={biz.contacts} onChange={v=>upd("contacts",v)}/>
+      </Section>
+
+      <Section label={`Research Links  ·  ${biz.links.length}`} accent={biz.color}>
+        <LinksSection links={biz.links} onChange={v=>upd("links",v)}/>
+      </Section>
+    </div>
+  );
+}
+
+// ─── APP ──────────────────────────────────────────────────────
+export default function BusinessDojo() {
+  const [businesses,setBusinesses]=useState(INIT_BIZ);
+  const [active,setActive]=useState("home");
+  const updBiz=(id,data)=>setBusinesses(bs=>bs.map(b=>b.id===id?data:b));
+  const addBiz=(biz)=>{setBusinesses(bs=>[...bs,biz]); setActive(biz.id);};
+  const all=businesses.flatMap(b=>b.tasks);
+  const overall=pct(all);
+  const TABS=[{id:"home",label:"Home"},{id:"dashboard",label:"Dashboard"},{id:"idea-lab",label:"+ Idea Lab"},...businesses.map(b=>({id:b.id,label:b.name,color:b.color}))];
+
+  return (
+    <div style={{fontFamily:"'Oxygen',sans-serif",background:J.bg,minHeight:"100vh",color:J.text}}>
+      <style>{`
+        @import url('${FONTS}');
+        * { box-sizing:border-box; }
+        ::-webkit-scrollbar { width:4px; height:4px; }
+        ::-webkit-scrollbar-track { background:${J.bg}; }
+        ::-webkit-scrollbar-thumb { background:${J.dim}; border-radius:2px; }
+        input::placeholder, textarea::placeholder { color:${J.dim}; }
+        input:focus, textarea:focus { outline:none; }
+      `}</style>
+
+      <nav style={{background:J.surface,borderBottom:`1px solid ${J.line}`,display:"flex",alignItems:"center",padding:"0 40px",overflowX:"auto",position:"sticky",top:0,zIndex:100}}>
+        <div style={{fontSize:9,fontFamily:"'Courier Prime',monospace",color:J.emerald,letterSpacing:"0.24em",padding:"20px 28px 20px 0",borderRight:`1px solid ${J.line}`,marginRight:4,whiteSpace:"nowrap",flexShrink:0}}>
+          BIZ DOJO &nbsp; {overall}%
+        </div>
+        {TABS.map(tab=>{
+          const act=active===tab.id;
+          const col=tab.color||J.emerald;
+          return (
+            <button key={tab.id} onClick={()=>setActive(tab.id)} style={{background:"none",border:"none",cursor:"pointer",padding:"20px 22px",fontSize:10,fontFamily:"'Courier Prime',monospace",color:act?col:J.muted,borderBottom:`2px solid ${act?col:"transparent"}`,letterSpacing:"0.12em",textTransform:"uppercase",whiteSpace:"nowrap",transition:"all .15s"}}>
+              {tab.label}
+            </button>
+          );
+        })}
+      </nav>
+
+      <main style={{maxWidth:1080,margin:"0 auto",padding:"52px 40px"}}>
+        {active==="home"&&<HomeTab businesses={businesses}/>}
+        {active==="dashboard"&&<DashboardTab businesses={businesses}/>}
+        {active==="idea-lab"&&<IdeaLabTab onCreateBusiness={addBiz}/>}
+        {businesses.map(biz=>active===biz.id&&<BusinessTab key={biz.id} biz={biz} onChange={d=>updBiz(biz.id,d)}/>)}
+      </main>
+    </div>
+  );
+}
